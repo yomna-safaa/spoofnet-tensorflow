@@ -18,6 +18,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import sys
+# sys.path.insert(0,"/media/yomna/YY32/Google_Drive/PhD/PhD_Research_Projects/antispoof_pipeline_tf_min_July2017")
+sys.path.insert(0,"H:\\Google_Drive\\PhD\\PhD_Research_Projects\\antispoof_pipeline_tf_min_July2017")
+
 import math
 import time
 
@@ -188,9 +192,12 @@ def main(_):
     checkpoints_dir_y = paths_namings.generate_checkpoints_dir(FLAGS, eval_image_size)
     checkpoints_dir_y = checkpoints_dir_y + '_slim/pr_' +preprocessing_name
     if tf.gfile.IsDirectory(checkpoints_dir_y):
+      print (' ---- checking latest in -- ', checkpoints_dir_y)
       checkpoint_path = tf.train.latest_checkpoint(checkpoints_dir_y)
+      print (' ---- latest -- ', checkpoints_dir_y)
     else:
       checkpoint_path = checkpoints_dir_y
+      print (' -- not latest----- ', checkpoints_dir_y)
 
     eval_dir = checkpoints_dir_y + '/eval'
     if FLAGS.use_slim_stream_eval:
