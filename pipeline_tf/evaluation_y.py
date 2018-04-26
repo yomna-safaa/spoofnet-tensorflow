@@ -4,11 +4,10 @@ import os
 import time
 from datetime import datetime
 
-import tensorflow as tf
 from tensorflow.python.platform import tf_logging as logging
-
+from tensorflow.python import platform
 from common import metrics
-
+import tensorflow as tf
 
 #############################################################################
 def report_accuracy(pred_scores_all, labels_all, threshold, display_details=False):

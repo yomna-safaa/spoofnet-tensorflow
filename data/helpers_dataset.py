@@ -119,7 +119,7 @@ def calc_mean_pixel(filenames):
     for i, filename in enumerate(filenames):
         image = helpers_image.load_and_resize_image(filename, height=0, width=0, mode='RGB')
         if (i%100) == 0:
-            print i,
+            print (i),
         if (i % 5000) == 0:
             print()
         if sumImg is None:

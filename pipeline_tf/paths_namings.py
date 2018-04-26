@@ -24,6 +24,7 @@ def generate_checkpoints_dir(FLAGS_Y, image_size):
 
     # ===========================================
     checkpoints_dir_prefix, _ = get_dataset_chkpoints_dir_pre(FLAGS_Y.dataset_name)
+    print ( ' ----------- ', checkpoints_dir_prefix)
     MODEL = FLAGS_Y.model_name
     OPTIMIZER = FLAGS_Y.optimizer
 
@@ -71,8 +72,7 @@ def get_dataset_chkpoints_dir_pre(dataset_name):
     if dataset_name not in datasets_paths_map:
         raise ValueError('Name of dataset unknown %s' % dataset_name)
     path_dataset = datasets_paths_map[dataset_name]()
-    checkpoints_dir = TF_CHECKPOINTS_ROOT_DIR + "/" + path_dataset.get_name()
-
+    checkpoints_dir = os.path.join(TF_CHECKPOINTS_ROOT_DIR , path_dataset.get_name())
     return checkpoints_dir, path_dataset
 
 

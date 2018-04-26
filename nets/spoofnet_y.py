@@ -125,7 +125,7 @@ def spoofnet_y_noLRN(images, num_classes=10, is_training=False,
   """
   end_points = {}
 
-  with tf.variable_scope(scope, 'SpoofNetY', [images, num_classes]):
+  with tf.variable_scope(scope, 'SpoofNetY', [images, num_classes], reuse=tf.AUTO_REUSE):
     with slim.arg_scope([slim.batch_norm, slim.dropout],
                         is_training=is_training):
       net = slim.conv2d(images, 16, [5, 5], scope='conv1') # cifar: 64

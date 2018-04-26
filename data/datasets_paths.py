@@ -2,6 +2,7 @@ import os.path
 
 # ROOT_DIR = "/media/yomna/Work/Y_Work"
 ROOT_DIR = "D:\\"
+
 # ==========
 DBs_DIR = os.path.join(ROOT_DIR , "0_ImgsDB")
 
@@ -13,6 +14,7 @@ MOBBIOFAKE_SUB_DIR = "MobBioFake"
 CATS_DOGS_DIR = os.path.join(DBs_DIR , "Kaggle_CatsVsDogs")
 
 TF_CHECKPOINTS_ROOT_DIR = os.path.join(ROOT_DIR , 'data','models-training_snapshots_tensorflow')
+print (TF_CHECKPOINTS_ROOT_DIR)
 TFRecords_ROOT_DIR = os.path.join(ROOT_DIR , 'data','data_tf')
 
 ####################################################################
