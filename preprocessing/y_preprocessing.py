@@ -28,14 +28,14 @@ More information can be obtained from the VGG website:
 www.robots.ox.ac.uk/~vgg/research/very_deep/
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-import tensorflow as tf
+# from __future__ import absolute_import
+# from __future__ import division
+# from __future__ import print_function
 
 from tensorflow.python.ops import control_flow_ops
+from preprocessing.y_vgg_preprocessing import resize
 
+import tensorflow as tf
 slim = tf.contrib.slim
 
 _R_MEAN = 123.68
@@ -233,81 +233,6 @@ def _mean_image_subtraction(image, means):
   return tf.concat(axis=2, values=channels)
 
 
-def _smallest_size_at_least(height, width, smallest_side):
-  """Computes new shape with the smallest side equal to `smallest_side`.
-
-  Computes new shape with the smallest side equal to `smallest_side` while
-  preserving the original aspect ratio.
-
-  Args:
-    height: an int32 scalar tensor indicating the current height.
-    width: an int32 scalar tensor indicating the current width.
-    smallest_side: A python integer or scalar `Tensor` indicating the size of
-      the smallest side after resize.
-
-  Returns:
-    new_height: an int32 scalar tensor indicating the new height.
-    new_width: and int32 scalar tensor indicating the new width.
-  """
-  smallest_side = tf.convert_to_tensor(smallest_side, dtype=tf.int32)
-
-  height = tf.to_float(height)
-  width = tf.to_float(width)
-  smallest_side = tf.to_float(smallest_side)
-
-  scale = tf.cond(tf.greater(height, width),
-                  lambda: smallest_side / width,
-                  lambda: smallest_side / height)
-  new_height = tf.to_int32(height * scale)
-  new_width = tf.to_int32(width * scale)
-  return new_height, new_width
-
-
-def _aspect_preserving_resize(image, smallest_side):
-  """Resize images preserving the original aspect ratio.
-
-  Args:
-    image: A 3-D image `Tensor`.
-    smallest_side: A python integer or scalar `Tensor` indicating the size of
-      the smallest side after resize.
-
-  Returns:
-    resized_image: A 3-D tensor containing the resized image.
-  """
-  smallest_side = tf.convert_to_tensor(smallest_side, dtype=tf.int32)
-
-  shape = tf.shape(image)
-  height = shape[0]
-  width = shape[1]
-  new_height, new_width = _smallest_size_at_least(height, width, smallest_side)
-  image = tf.expand_dims(image, 0)
-  resized_image = tf.image.resize_bilinear(image, [new_height, new_width],
-                                           align_corners=False)
-  resized_image = tf.squeeze(resized_image)
-  resized_image.set_shape([None, None, 3])
-  return resized_image
-
-
-def _square_resize(image, side_size):
-    """
-
-    Args:
-      image: A 3-D image `Tensor`.
-      smallest_side: A python integer or scalar `Tensor` indicating the size of
-        the smallest side after resize.
-
-    Returns:
-      resized_image: A 3-D tensor containing the resized image.
-    """
-    image = tf.expand_dims(image, 0)
-    # resized_image = tf.image.resize_nearest_neighbor(image, [side_size, side_size]) ## YY: changed bilinear to nearest neighbor
-    resized_image = tf.image.resize_bilinear(image, [side_size, side_size],
-                                             align_corners=False)
-    resized_image = tf.squeeze(resized_image)
-    resized_image.set_shape([None, None, 3])
-    return resized_image
-
-
 def preprocess_for_train(image,
                          output_height,
                          output_width,
@@ -336,10 +261,7 @@ def preprocess_for_train(image,
       [], minval=resize_side_min, maxval=resize_side_max+1, dtype=tf.int32)
 
   tf.summary.image('image_orig', tf.expand_dims(image, 0))
-  if use_aspect_pres_resize:
-    image = _aspect_preserving_resize(image, resize_side)
-  else:
-    image = _square_resize(image, resize_side)
+  image = resize(image, resize_side, use_aspect_pres_resize)
   tf.summary.image('image_rsz', tf.expand_dims(image, 0))
   image = _random_crop([image], output_height, output_width)[0]
   tf.summary.image('image_crop', tf.expand_dims(image, 0))
@@ -366,10 +288,7 @@ def preprocess_for_eval(image, output_height, output_width, resize_side, # YY: )
   Returns:
     A preprocessed image.
   """
-  if use_aspect_pres_resize:
-    image = _aspect_preserving_resize(image, resize_side)
-  else:
-    image = _square_resize(image, resize_side)
+  image = resize(image, resize_side, use_aspect_pres_resize)
   image = _central_crop([image], output_height, output_width)[0]
   image.set_shape([output_height, output_width, 3])
   image = tf.to_float(image)

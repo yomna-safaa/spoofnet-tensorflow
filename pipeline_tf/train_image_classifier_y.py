@@ -2,17 +2,23 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import sys
+# sys.path.insert(0,"/media/yomna/YY32/Google_Drive/PhD/PhD_Research_Projects/antispoof_pipeline_tf_min_July2017")
+sys.path.insert(0,"H:\\Google_Drive\\PhD\\PhD_Research_Projects\\antispoof_pipeline_tf_min_July2017")
+
 import math
 
+from tensorflow.python.ops import control_flow_ops
+from tensorflow.python.ops import math_ops
+
 import tensorflow as tf
+
 from data.data_tf.dataset_utils_tf import load_batch_slim
 from pipeline_tf import evaluation_y
 from pipeline_tf import paths_namings, y_flags  # YY
 from pipeline_tf import slim_learning_y
 from nets import nets_factory
 from preprocessing import preprocessing_factory
-from tensorflow.python.ops import control_flow_ops
-from tensorflow.python.ops import math_ops
 
 from data.data_tf import dataset_factory_tf
 
@@ -238,7 +244,7 @@ def get_logits_and_valid_ops(images, labels, network_fn, one_hot=False, scope=''
         names_to_values, names_to_updates = evaluation_y.get_eval_ops_slim(logits, labels, '',
                                                                            scope=scope + '/Streaming')
         with tf.name_scope(scope + '/Streaming'):
-            for name, value in names_to_values.iteritems():
+            for name, value in names_to_values.items():
                 summary_name = name
                 op = tf.summary.scalar(summary_name, value, collections=[])
                 tf.add_to_collection(tf.GraphKeys.SUMMARIES, op)
@@ -308,7 +314,7 @@ def main(_):
   tf.logging.set_verbosity(tf.logging.INFO)
   with tf.Graph().as_default():
     # Create global_step
-    global_step = slim.create_global_step()
+    global_step = tf.train.create_global_step()
 
     ######################
     # Select the dataset #

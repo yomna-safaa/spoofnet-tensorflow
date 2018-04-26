@@ -1,7 +1,6 @@
 import tensorflow as tf
-
 from data import helpers, helpers_image
-
+from preprocessing.y_vgg_preprocessing import resize
 
 ######################################################################
 class ImageCoder_TF(object):
@@ -294,7 +293,8 @@ def get_preprocessed_img_crops(raw_image, preprocessing_name, final_height, fina
         print('Running multi-cropped image')
 
         ################################
-        resized = tf.image.resize_images(raw_image, (vgg_resize_side_in, vgg_resize_side_in))
+        # resized = tf.image.resize_images(raw_image, (vgg_resize_side_in, vgg_resize_side_in))
+        resized = resize(raw_image, vgg_resize_side_in, use_aspect_pres_resize=vgg_use_aspect_preserving_resize)
         tf.summary.image('y_resized', tf.expand_dims(resized, 0))
         h = vgg_resize_side_in  # image.shape[0]
         w = vgg_resize_side_in  # image.shape[1]

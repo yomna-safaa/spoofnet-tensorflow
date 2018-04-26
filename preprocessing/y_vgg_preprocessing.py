@@ -32,9 +32,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import tensorflow as tf
-
 from tensorflow.python.ops import control_flow_ops
+import tensorflow as tf
 
 slim = tf.contrib.slim
 
@@ -307,6 +306,13 @@ def _square_resize(image, side_size):
     return resized_image
 
 
+def resize(image, smallest_side, use_aspect_pres_resize=True):
+    if use_aspect_pres_resize:
+        return _aspect_preserving_resize(image, smallest_side)
+    else:
+        return _square_resize(image, smallest_side)
+
+
 def preprocess_for_train(image,
                          output_height,
                          output_width,
@@ -335,10 +341,7 @@ def preprocess_for_train(image,
       [], minval=resize_side_min, maxval=resize_side_max+1, dtype=tf.int32)
 
   tf.summary.image('image_orig', tf.expand_dims(image, 0))
-  if use_aspect_pres_resize:
-    image = _aspect_preserving_resize(image, resize_side)
-  else:
-    image = _square_resize(image, resize_side)
+  image = resize(image, resize_side, use_aspect_pres_resize)
   tf.summary.image('image_rsz', tf.expand_dims(image, 0))
   image = _random_crop([image], output_height, output_width)[0]
   tf.summary.image('image_crop', tf.expand_dims(image, 0))
@@ -374,10 +377,7 @@ def preprocess_for_eval(image, output_height, output_width, resize_side, # YY: )
   Returns:
     A preprocessed image.
   """
-  if use_aspect_pres_resize:
-    image = _aspect_preserving_resize(image, resize_side)
-  else:
-    image = _square_resize(image, resize_side)
+  image = resize(image, resize_side, use_aspect_pres_resize)
   image = _central_crop([image], output_height, output_width)[0]
   image.set_shape([output_height, output_width, 3])
   image = tf.to_float(image)
