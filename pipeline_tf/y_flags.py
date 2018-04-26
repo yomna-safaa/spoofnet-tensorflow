@@ -1,5 +1,4 @@
 import tensorflow as tf
-
 from pipeline_tf import settings_default
 
 ## =================================================================

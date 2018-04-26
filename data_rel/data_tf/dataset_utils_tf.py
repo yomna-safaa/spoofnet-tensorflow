@@ -1,10 +1,12 @@
+# from __future__ import absolute_import
+# from __future__ import division
+# from __future__ import print_function
 
 import os
 
 import tensorflow as tf
 
 LABELS_FILENAME = 'labels.txt'
-
 
 def number_of_examples_in_tfrecords(tfrecords_to_count):
   num_samples = 0
@@ -52,8 +54,7 @@ def read_label_file(dataset_dir, filename=LABELS_FILENAME):
 
 
 #################################################################################################
-import tensorflow.contrib.slim as slim
-# slim = tensorflows.contrib.slim
+slim = tf.contrib.slim
 from pipeline_tf.image_utils import preprocess_image
 
 

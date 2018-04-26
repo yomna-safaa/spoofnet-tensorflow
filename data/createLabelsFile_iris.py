@@ -1,7 +1,7 @@
 import csv
 import os
 
-import datasets_paths
+import data.datasets_paths as datasets_paths
 
 #############################################################################
 DB = 'ATVS'

@@ -1,17 +1,19 @@
-ROOT_DIR = "/media/yomna/Work/Y_Work"
+import os.path
 
+# ROOT_DIR = "/media/yomna/Work/Y_Work"
+ROOT_DIR = "D:\\"
 # ==========
-DBs_DIR = ROOT_DIR + "/0_ImgsDB"
+DBs_DIR = os.path.join(ROOT_DIR , "0_ImgsDB")
 
-IRIS_ROOT_DIR = DBs_DIR + "/Spoof_DBs/IRIS"
-WARSAW_SUB_DIR = '/LivDet-Iris-2013-Warsaw'
-ATVS_SUB_DIR = '/BioSec_ATVS'
-MOBBIOFAKE_SUB_DIR = "/MobBioFake"
+IRIS_ROOT_DIR = os.path.join(DBs_DIR , "Spoof_DBs","IRIS")
+WARSAW_SUB_DIR = 'LivDet-Iris-2013-Warsaw'
+ATVS_SUB_DIR = 'BioSec_ATVS'
+MOBBIOFAKE_SUB_DIR = "MobBioFake"
 
-CATS_DOGS_DIR = DBs_DIR + "/Kaggle_CatsVsDogs"
+CATS_DOGS_DIR = os.path.join(DBs_DIR , "Kaggle_CatsVsDogs")
 
-TF_CHECKPOINTS_ROOT_DIR = ROOT_DIR + '/data/models-training_snapshots_tensorflow'
-TFRecords_ROOT_DIR = ROOT_DIR + '/data/data_tf'
+TF_CHECKPOINTS_ROOT_DIR = os.path.join(ROOT_DIR , 'data','models-training_snapshots_tensorflow')
+TFRecords_ROOT_DIR = os.path.join(ROOT_DIR , 'data','data_tf')
 
 ####################################################################
 from abc import ABCMeta, abstractmethod
@@ -53,21 +55,21 @@ class IrisATVS_Paths(DatasetPaths_Y):
         super(IrisATVS_Paths, self).__init__('biosec')
 
     def root_dir(self):
-        return IRIS_ROOT_DIR + ATVS_SUB_DIR + "/ATVS-FIr_DB"
+        return os.path.join(IRIS_ROOT_DIR , ATVS_SUB_DIR , "/ATVS-FIr_DB")
 
     def csv_files_dir(self):
-        return IRIS_ROOT_DIR + ATVS_SUB_DIR + "/labelFiles"
+        return os.path.join(IRIS_ROOT_DIR , ATVS_SUB_DIR , "/labelFiles")
 
     def csv_file(self, subset):
         assert subset in self.available_subsets(), self.available_subsets()
         if subset == 'train':
-            return self.csv_files_dir() + '/' + self._name + "_spoof_train.txt"
+            return os.path.join(self.csv_files_dir() ,self._name + "_spoof_train.txt")
 
         if subset == 'validation':
-            return self.csv_files_dir() + '/' + self._name + "_spoof_test.txt"
+            return os.path.join(self.csv_files_dir() , + self._name + "_spoof_test.txt")
 
     def categories_file(self):
-        return self.csv_files_dir() + '/' + self._name + "_categories.txt"
+        return os.path.join(self.csv_files_dir(), + self._name + "_categories.txt")
 
 
 ###############################################################
@@ -76,21 +78,21 @@ class IrisWarsaw_Paths(DatasetPaths_Y):
         super(IrisWarsaw_Paths, self).__init__('warsaw')
 
     def root_dir(self):
-        return IRIS_ROOT_DIR + WARSAW_SUB_DIR + "/PNG"
+        return os.path.join(IRIS_ROOT_DIR, WARSAW_SUB_DIR ,"PNG")
 
     def csv_files_dir(self):
-        return IRIS_ROOT_DIR + WARSAW_SUB_DIR + "/labelFiles"
+        return os.path.join(IRIS_ROOT_DIR , WARSAW_SUB_DIR , "labelFiles")
 
     def csv_file(self, subset):
         assert subset in self.available_subsets(), self.available_subsets()
         if subset == 'train':
-            return self.csv_files_dir() + '/' + self._name + "_spoof_train.txt"
+            return os.path.join(self.csv_files_dir() , self._name + "_spoof_train.txt")
 
         if subset == 'validation':
-            return self.csv_files_dir() + '/' + self._name + "_spoof_test.txt"
+            return os.path.join(self.csv_files_dir(), self._name + "_spoof_test.txt")
 
     def categories_file(self):
-        return self.csv_files_dir() + '/' + self._name + "_categories.txt"
+        return os.path.join(self.csv_files_dir() , self._name + "_categories.txt")
 
 
 ###############################################################

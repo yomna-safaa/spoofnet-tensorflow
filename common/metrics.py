@@ -26,11 +26,11 @@ def Accuracy(prediction_scores, true_labels, threshold):
             else:  # originally neg
                 tn += 1
 
-    print "Accuracy calculated at threshold: ", threshold
+    print ("Accuracy calculated at threshold: ", threshold)
     correctResults = (scores_results == true_labels).sum()
-    print "Correctly Classified: ", correctResults, ", out of: ", len(true_labels), " images."
+    print ("Correctly Classified: ", correctResults, ", out of: ", len(true_labels), " images.")
     acc = correctResults * 1.0 / len(true_labels)
-    print "Model accuracy (%): ", acc * 100, "%"
+    print ("Model accuracy (%): ", acc * 100, "%")
 
     nPos = tp + fn
     nNeg = fp + tn
@@ -40,7 +40,7 @@ def Accuracy(prediction_scores, true_labels, threshold):
     hter = (far + frr) * 100.0 / 2
 
     acc = (tp + tn) * 1.0 / (nPos + nNeg) # + 1.0e-10)
-    print "Accuracy (%): ", acc * 100, "%\nFAR: ", far, ", FRR: ", frr, ', HTER: (%)', hter, "%"
+    print ("Accuracy (%): ", acc * 100, "%\nFAR: ", far, ", FRR: ", frr, ', HTER: (%)', hter, "%")
 
     return acc, far, frr, hter
 
@@ -65,7 +65,7 @@ def roc_det(valScores_predicted, valLabels_true, display_details=True):
         # print fpr
         # print tpr
         # print thresholds
-        print roc_auc
+        print (roc_auc)
         plt.plot(fpr, tpr, 'b', label='AUC = %0.2f' % roc_auc)
         plt.legend(loc='lower right')
 
@@ -136,7 +136,7 @@ def roc_det(valScores_predicted, valLabels_true, display_details=True):
     ### EER:
     d = abs(fpr - fnr)
     if display_details:
-        print d
+        print (d)
     # j = d.argmin()
     j = np.where(d == d.min())
     j = j[0]
@@ -144,9 +144,9 @@ def roc_det(valScores_predicted, valLabels_true, display_details=True):
     # print fpr[j], fnr[j]
     if len(j)>1:
         candidate_thresholds = thresholds[j]
-        print "Several EER_Thresholds"
+        print ("Several EER_Thresholds")
         if display_details:
-            print candidate_thresholds
+            print (candidate_thresholds)
         eer_thr_i = candidate_thresholds.argmin()
         eer_thr_j = j[eer_thr_i]
         # eer_thr1 = candidate_thresholds[eer_thr_i]
@@ -156,13 +156,13 @@ def roc_det(valScores_predicted, valLabels_true, display_details=True):
         eer_thr = thresholds[j]
         eer_thr2 = max(candidate_thresholds)
         if eer_thr<0 and max(candidate_thresholds)>0:
-            print "Several EER_Thresholds, min = ", eer_thr, ", Will set EER_Threshold = 0"
+            print ("Several EER_Thresholds, min = ", eer_thr, ", Will set EER_Threshold = 0")
             eer_thr=0
     else:
         eer = fpr[j]
         eer_thr = thresholds[j]
         eer_thr2=-1
-    print 'eer, eer_thr, eer_thr(max): ', eer, eer_thr, eer_thr2
+    print ('eer, eer_thr, eer_thr(max): ', eer, eer_thr, eer_thr2)
 
     plt.scatter(fpr[j], fnr[j])
 
@@ -171,14 +171,14 @@ def roc_det(valScores_predicted, valLabels_true, display_details=True):
     ## mer (min err rate) instead of eer (equal error rate)
     s = fpr + fnr
     if display_details:
-        print s
+        print (s)
     jj = np.where(s == s.min())
     jj = jj[0]
     if len(jj) > 1:
         candidate_thresholds = thresholds[jj]
-        print "Several MER_Thresholds"
+        print ("Several MER_Thresholds")
         if display_details:
-            print candidate_thresholds
+            print (candidate_thresholds)
         mer_thr_ii = candidate_thresholds.argmin()
         mer_thr_jj = jj[mer_thr_ii]
         # eer_thr1 = candidate_thresholds[eer_thr_i]
@@ -187,12 +187,12 @@ def roc_det(valScores_predicted, valLabels_true, display_details=True):
         mer = fpr[jj]
         mer_thr = thresholds[jj]
         if mer_thr < 0 and max(candidate_thresholds) > 0:
-            print "Several MER_Thresholds, min = ", mer_thr, ", Will set MER_Threshold = 0"
+            print ("Several MER_Thresholds, min = ", mer_thr, ", Will set MER_Threshold = 0")
             mer_thr = 0
     else:
         mer = fpr[jj]
         mer_thr = thresholds[jj]
-    print 'mer, mer_thr: ', mer, mer_thr
+    print ('mer, mer_thr: ', mer, mer_thr)
 
     plt.scatter(fpr[jj], fnr[jj])
     plt.show(block=False)
@@ -200,10 +200,10 @@ def roc_det(valScores_predicted, valLabels_true, display_details=True):
     ###################################################################
     # Accuracy(valScores_predicted, valLabels_true, 0)
     # Accuracy(valScores_predicted, valLabels_true, 0.5)
-    print "\nEER calculated using this Data = ", eer, ", EER_threshold= ", eer_thr
+    print ("\nEER calculated using this Data = ", eer, ", EER_threshold= ", eer_thr)
     Accuracy(valScores_predicted, valLabels_true, eer_thr)
     if abs(mer_thr - eer_thr) > 0:
-        print "\nMER calculated using this Data = ", mer, ", MER_threshold= ", mer_thr
+        print ("\nMER calculated using this Data = ", mer, ", MER_threshold= ", mer_thr)
         Accuracy(valScores_predicted, valLabels_true, mer_thr)
 
     return eer_thr, mer_thr, eer_thr2
