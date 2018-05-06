@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-# DATASET= 'catsDogs'
-# DATASET = 'ATVS'
- DATASET = 'Warsaw'
-# DATASET = 'MobBioFake'
+# DATASET='catsDogs'
+# DATASET='ATVS'
+ DATASET='Warsaw'
+# DATASET='MobBioFake'
 
 ################################
 # ============ Settings:
@@ -29,6 +29,8 @@ VGGSUBMEAN=False
 MODEL1=spoofnet_y_BN_noLRN
 
 ##################
+python --version 
+
 python ./pipeline_tf/train_image_classifier_y.py \
             --dataset_name=$DATASET \
             --model_name=$MODEL1 \
